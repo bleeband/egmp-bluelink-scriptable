@@ -11,7 +11,7 @@ export function doDowngrade(appFile = `${Script.name()}.js`) {
     fm.remove(`${SCRIPTABLE_DIR}/${appFile}`)
     fm.move(`${SCRIPTABLE_DIR}/${appFile}.backup`, `${SCRIPTABLE_DIR}/${appFile}`)
   } else {
-    OK('Downgrade Dailed', { message: `Aucune version précédente de: ${appFile}` }) /*  */
+    OK('Échec de la rétrogradation', { message: `Aucune version précédente de: ${appFile}` }) /*  */
   }
 }
 
@@ -27,7 +27,7 @@ async function doUpgrade(url: string, appFile = `${Script.name()}.js`) {
       }
       fm.move(`${SCRIPTABLE_DIR}/${appFile}`, `${SCRIPTABLE_DIR}/${appFile}.backup`)
     } catch (e) {
-      logger.log(`Failed to backup current script: ${e}`)
+      logger.log(`Échec de la sauvegarde du script actuel: ${e}`)
     }
     fm.write(`${SCRIPTABLE_DIR}/${appFile}`, data)
   } else {
@@ -105,7 +105,7 @@ const appDescription = connect(() => {
 
 const author = connect(({ state: { coffeeImage } }) => {
   const divArray = [
-    P('Auteur: Andy Fase', {
+    P('Auteur: BLeeBand', {
       /*  */ font: (n) => Font.mediumRoundedSystemFont(n),
       fontSize: 20,
       align: 'left',
@@ -203,7 +203,7 @@ const upgradeNotes = connect(({ state: { currentVersion, release } }) => {
 const appWebsite = connect(() => {
   return Div(
     [
-      P('https://bluelink.andyfase.com', {
+      P('https://bleeband.github.io/egmp-bluelink-scriptable/', {
         font: (n) => Font.mediumRoundedSystemFont(n),
         fontSize: 20,
         color: Color.blue(),
@@ -212,7 +212,7 @@ const appWebsite = connect(() => {
     ],
     {
       onTap: async () => {
-        Safari.open('https://bluelink.andyfase.com')
+        Safari.open('https://bleeband.github.io/egmp-bluelink-scriptable/')
       },
     },
   )

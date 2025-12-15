@@ -71,15 +71,15 @@ class ThrottledBatchQueue<T> {
   }
 
   private async run() {
-    if (this.isRunning) throw new Error('Queue already running')
-    if (this.isPaused) throw new Error('Run called while paused')
+    if (this.isRunning) throw new Error("File d'attente déjà en cours")
+    if (this.isPaused) throw new Error('Exécution appelée pendant la pause')
     if (this.queue.length === 0) {
-      this.debugLog('Nothing left in queue to run.')
+      this.debugLog("Plus rien en attente d'exécution.")
       return
     }
     this.isRunning = true
     const batchEntities = this.shiftQueue()
-    this.debugLog(`Running batch operation on ${batchEntities.length} entities, ${this.queue.length} remaining.`)
+    this.debugLog(`Exécution d'une opération par lots sur ${batchEntities.length} entités, ${this.queue.length} restante.`)
     if (this.queue.length > 0) this.snoozeRun()
     if (batchEntities.length > 0) await this.batchOperation(batchEntities as [T, ...T[]])
     // This smells, but I want to ensure that snoozeRun gets called ASAP, but
@@ -91,12 +91,12 @@ class ThrottledBatchQueue<T> {
 
   private snoozeRun() {
     if (this.isPaused) {
-      this.debugLog('Snooze run called while queue is paused.')
+      this.debugLog("Exécution de la fonction Snooze appelée pendant la pause de la file d'attente.")
       return
     }
     wait(this.interval, () => {
       if (this.queue.length === 0) {
-        this.debugLog('After snoozing, there is nothing left in the queue to run.')
+        this.debugLog("Après la mise en veille, il ne reste plus rien à exécuter dans la file d'attente.")
         return
       }
       if (this.isRunning) this.snoozeRun()
@@ -107,7 +107,7 @@ class ThrottledBatchQueue<T> {
   push(...entities: T[]) {
     const newEntities = entities.filter((e) => !this.queue.some((queuedEntity) => this.isEqual(queuedEntity, e)))
     if (newEntities.length === 0) {
-      this.debugLog('Push: all of the pushed entities are in the queue.')
+      this.debugLog("Push : toutes les entités poussées sont dans la file d'attente.")
       return
     }
     for (const entity of newEntities) this.queue.push(entity)
@@ -118,12 +118,12 @@ class ThrottledBatchQueue<T> {
 
   /** Halts queue execution after any currently running operations complete */
   pause() {
-    this.debugLog('Paused the queue')
+    this.debugLog("La file d'attente a été interrompue.")
     this.isPaused = true
   }
 
   resume() {
-    this.debugLog('Resumed the queue')
+    this.debugLog("La file d'attente a repris.")
     this.isPaused = false
     if (!this.isRunning) this.snoozeRun()
   }

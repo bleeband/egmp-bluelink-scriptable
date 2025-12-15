@@ -110,7 +110,7 @@ import { confirm, quickOptions } from './lib/scriptable-utils'
     }
 
     if (!bl) {
-      logger.log('Bluelink instance is undefined')
+      logger.log("L'instance Bluelink est indéfinie")
       await confirm("Une erreur est survenue lors de l'initialisation de Bluelink — veuillez réessayer plus tard", {
         /*  */ confirmButtonTitle: 'Ok',
         includeCancel: false,
@@ -148,7 +148,7 @@ import { confirm, quickOptions } from './lib/scriptable-utils'
     try {
       // check if we need to restart script - needed to clear out any login webviews
       if (bl.needRestart()) {
-        logger.log('Restarting script to clear webview')
+        logger.log('Redémarrage du script pour effacer la vue Web')
         const scriptUrl = URLScheme.forRunningScript()
         Safari.open(scriptUrl)
         return
@@ -160,7 +160,7 @@ import { confirm, quickOptions } from './lib/scriptable-utils'
       Script.complete()
       return resp
     } catch (error) {
-      logger.log(`main error ${JSON.stringify(error)}`)
+      logger.log(`erreur principale ${JSON.stringify(error)}`)
     }
   }
 })()

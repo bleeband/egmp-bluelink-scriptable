@@ -25,11 +25,11 @@ const colorData = colorKeys.map(getEnhancedColor)
 
 //
 
-const Title = () => H1('Choose color')
+const Title = () => H1('Choisir la couleur')
 
 const AddCustomCTA = () =>
   Button({
-    text: 'Add custom',
+    text: 'Ajout perso',
     icon: 'add',
     dismissOnTap: true,
     onTap: () => setState({ selectedColor: 'ADD_CUSTOM' }),
@@ -80,7 +80,7 @@ export default async (): Promise<EnhancedColor | null> => {
     render: () => [Title(), AddCustomCTA(), ColorRows()],
   })
   if (selectedColor === 'ADD_CUSTOM') {
-    const hexStr = await textInput('Enter hex w/o #')
+    const hexStr = await textInput('Entrer hex sans #')
     return hexStr ? new EnhancedColor({ label: hexStr, staticColor: new Color(hexStr) }) : null
   }
   return selectedColor

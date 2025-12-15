@@ -223,7 +223,7 @@ export default async <E>({
         if (query) {
           await clearSearchQuery()
         } else {
-          const newQuery = await textInput('Enter search query')
+          const newQuery = await textInput('Saisissez votre requête de recherche')
           if (!newQuery) return
           await setSearchQuery(newQuery)
         }
@@ -236,7 +236,7 @@ export default async <E>({
     if (!filters) return null
     const { appliedFilters } = getState()
     return {
-      text: 'Edit filters',
+      text: 'Modifier les filtres',
       icon: 'filter',
       ...(appliedFilters.length > 0 && { metadata: appliedFilters.length }),
       onTap: async () => {
@@ -258,7 +258,7 @@ export default async <E>({
     if (!(allEntitiesCount && bulkActions)) return null
     const areAllSelected = selectedEntityIds.size === allEntitiesCount
     return {
-      text: areAllSelected ? 'Clear selection' : 'Select all',
+      text: areAllSelected ? 'Effacer la sélection' : 'Effacer tous',
       icon: areAllSelected ? 'cancel' : 'select_all',
       onTap: () => (areAllSelected ? deselectAll() : setSelectedIds(allEntityIds)),
     }

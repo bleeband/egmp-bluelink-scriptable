@@ -3,7 +3,7 @@ import { form, confirm, quickOptions, destructiveConfirm } from './lib/scriptabl
 
 const KEYCHAIN_BLUELINK_CONFIG_KEY = 'egmp-bluelink-config'
 
-export const STANDARD_CLIMATE_OPTIONS = ['Warm', 'Cool', 'Off', 'Cancel']
+export const STANDARD_CLIMATE_OPTIONS = ['Chaud', 'Froid', 'Off', 'Annuler']
 
 export interface Auth {
   username: string
@@ -28,12 +28,12 @@ export const ClimateSeatSettingWarm: Record<string, number> = {
 
 export const ClimateSeatSetting: Record<string, number> = {
   Off: 0,
-  'Cool - Low': 3,
-  'Cool - Medium': 4,
-  'Cool - High': 5,
-  'Heat - Low': 6,
-  'Heat - Medium': 7,
-  'Heat - High': 8,
+  'Froid - Bas': 3,
+  'Froid - Medium': 4,
+  'Froid - Haut': 5,
+  'Chaud - Bas': 6,
+  'Chaud - Medium': 7,
+  'Chaud - Haut': 8,
 }
 
 export interface CustomClimateConfig {
@@ -45,7 +45,7 @@ export interface CustomClimateConfig {
   steering: boolean
   durationMinutes: number
   seatClimate: string
-  seatClimateSettings: 'DRIVER' | 'FRONT' | 'ALL'
+  seatClimateSettings: 'Chauffeur' | 'Avant' | 'Tous'
 }
 
 export interface ChargeLimitConfig {
@@ -107,17 +107,17 @@ export interface FlattenedConfig {
 }
 
 // const SUPPORTED_REGIONS = ['canada']
-const SUPPORTED_REGIONS = ['canada', 'usa', 'europe', 'india', 'australia']
+const SUPPORTED_REGIONS = ['canada']
 const SUPPORTED_MANUFACTURERS = ['Hyundai', 'Kia', 'Genesis']
 const CAR_COLORS = ['White', 'Black', 'Grey', 'Matte-Grey', 'Metallic-Grey', 'Silver', 'Red', 'Orange', 'Blue', 'Green']
 const DEFAULT_TEMPS = {
   C: {
-    cold: 19,
-    warm: 21.5,
+    cold: 20,
+    Chaud: 23,
   },
   F: {
     cold: 66,
-    warm: 71,
+    Chaud: 71,
   },
 }
 
@@ -127,18 +127,18 @@ const DEFAULT_CONFIG = {
     username: '',
     password: '',
     pin: '',
-    region: '',
+    region: 'canada',
   },
   tempType: 'C',
   distanceUnit: 'km',
   climateTempCold: DEFAULT_TEMPS.C.cold,
-  climateTempWarm: DEFAULT_TEMPS.C.warm,
+  climateTempWarm: DEFAULT_TEMPS.C.Chaud,
   climateSeatLevel: 'Off',
   debugLogging: false,
   multiCar: false,
   promptForUpdate: true,
   allowWidgetRemoteRefresh: false,
-  carColor: 'white',
+  carColor: 'Blue',
   manufacturer: 'hyundai',
   hideDefaultClimates: false,
   customClimates: [],
@@ -223,8 +223,8 @@ function configValid(config: Config): boolean {
 
 export async function loadConfigScreen(bl: Bluelink | undefined = undefined) {
   return await form<FlattenedConfig>({
-    title: 'Bluelink Configuration settings',
-    subtitle: 'Saved within IOS keychain and never exposed beyond your device(s)',
+    title: 'Configuration de bluelink',
+    subtitle: 'Enregistrées dans le trousseau iOS et jamais exposées en dehors de votre ou vos appareils.',
     onSubmit: ({
       username,
       password,
@@ -261,7 +261,7 @@ export async function loadConfigScreen(bl: Bluelink | undefined = undefined) {
           climateTempWarm: climateTempWarm,
           climateSeatLevel: climateSeatLevel,
           allowWidgetRemoteRefresh: allowWidgetRemoteRefresh,
-          carColor: carColor ? carColor.toLocaleLowerCase() : 'white',
+          carColor: carColor ? carColor.toLocaleLowerCase() : 'blue',
           debugLogging: debugLogging,
           multiCar: multiCar,
           promptForUpdate: promptForUpdate,
@@ -279,10 +279,10 @@ export async function loadConfigScreen(bl: Bluelink | undefined = undefined) {
       if (state.tempType !== previousState.tempType) {
         if (state.tempType === 'C') {
           state.climateTempCold = DEFAULT_TEMPS.C.cold
-          state.climateTempWarm = DEFAULT_TEMPS.C.warm
+          state.climateTempWarm = DEFAULT_TEMPS.C.Chaud
         } else {
           state.climateTempCold = DEFAULT_TEMPS.F.cold
-          state.climateTempWarm = DEFAULT_TEMPS.F.warm
+          state.climateTempWarm = DEFAULT_TEMPS.F.Chaud
         }
       }
       if (state.allowWidgetRemoteRefresh && !previousState.allowWidgetRemoteRefresh) {
@@ -297,7 +297,7 @@ export async function loadConfigScreen(bl: Bluelink | undefined = undefined) {
         state.manufacturer === 'Kia' &&
         (previousState.region !== 'europe' || previousState.manufacturer !== 'Kia')
       ) {
-        confirm('Kia in Europe requires login through a webview. Login window will open automatically.', {
+        confirm("En Europe, Kia exige une connexion via une interface web. La fenêtre de connexion s'ouvrira automatiquement.", {
           /* 'Kia in Europe requires login through a webview. Login window will open automatically.' */
           confirmButtonTitle: 'Je comprends' /* I understand */,
           includeCancel: false,
@@ -316,22 +316,22 @@ export async function loadConfigScreen(bl: Bluelink | undefined = undefined) {
       if (climateTempWarm.toString().includes('.') && climateTempWarm % 1 !== 0.5) return false
       return true
     },
-    submitButtonText: 'Save',
+    submitButtonText: 'Sauvegarder',
     fields: {
       username: {
         type: 'textInput',
-        label: 'Bluelink Username',
+        label: "Nom d'utilisateur Bluelink",
         isRequired: true,
       },
       password: {
         type: 'textInput',
-        label: 'Bluelink Password',
+        label: "Mot de passe Bluelink",
         isRequired: true,
         secure: true,
       },
       pin: {
         type: 'textInput',
-        label: 'Bluelink PIN',
+        label: 'NIP Bluelink',
         isRequired: true,
         secure: true,
         flavor: 'number',
@@ -399,7 +399,7 @@ export async function loadConfigScreen(bl: Bluelink | undefined = undefined) {
       },
       debugLogging: {
         type: 'checkbox',
-        label: 'Enable debug logging' /*  */,
+        label: 'Activer le débogage' /*  */,
         isRequired: false,
       },
       promptForUpdate: {
@@ -424,7 +424,7 @@ export async function loadConfigScreen(bl: Bluelink | undefined = undefined) {
           const config = getConfig()
           const chargeLimitNames = Object.values(config.chargeLimits).map((x) => x.name)
           quickOptions(['New'].concat(chargeLimitNames), {
-            title: 'Create New Custom Climate or Edit Existing',
+            title: 'Créer ou modifier un climat personnalisé',
             onOptionSelect: (opt) => {
               loadChargeLimitConfig(
                 opt !== 'New' ? Object.values(config.chargeLimits).filter((x) => x.name === opt)[0] : undefined,
@@ -442,7 +442,7 @@ export async function loadConfigScreen(bl: Bluelink | undefined = undefined) {
           const config = getConfig()
           const customClimateNames = Object.values(config.customClimates).map((x) => x.name)
           quickOptions(['New'].concat(customClimateNames), {
-            title: 'Créer ou editer un proifil de climatisation' /* Create New Custom Climate or Edit Existing */,
+            title: 'Créer ou modifier un proifil de climatisation' /* Create New Custom Climate or Edit Existing */,
             onOptionSelect: (opt) => {
               loadCustomClimateConfig(
                 opt !== 'New' ? Object.values(config.customClimates).filter((x) => x.name === opt)[0] : undefined,
@@ -467,7 +467,7 @@ export async function loadConfigScreen(bl: Bluelink | undefined = undefined) {
 
 export async function loadWidgetConfigScreen() {
   return await form<WidgetConfig>({
-    title: 'Widget Poll Periods' /* Widget Poll Periods */,
+    title: 'Périodes de sondage du widget' /* Widget Poll Periods */,
     subtitle: 'Toutes les périodes sont calculées en heures' /* All periods are measured in hours */,
     onSubmit: ({
       standardPollPeriod,
@@ -516,32 +516,32 @@ export async function loadWidgetConfigScreen() {
     fields: {
       standardPollPeriod: {
         type: 'numberValue',
-        label: 'API Poll Period',
+        label: "Période d'interrogation de l'API",
         isRequired: true,
       },
       remotePollPeriod: {
         type: 'numberValue',
-        label: 'Remote Car Poll Period',
+        label: 'Période de sondage à distance des véhicules',
         isRequired: true,
       },
       chargingRemotePollPeriod: {
         type: 'numberValue',
-        label: 'Remote Car Charging Poll Period',
+        label: 'Période de sondage sur la recharge à distance des véhicules',
         isRequired: true,
       },
       nightStandardPollPeriod: {
         type: 'numberValue',
-        label: 'Night API Poll Period',
+        label: "Période d'interrogation de l'API nocturne",
         isRequired: true,
       },
       nightRemotePollPeriod: {
         type: 'numberValue',
-        label: 'Night Remote Car Poll Period',
+        label: 'Période de sondage nocturne à distance pour voiture',
         isRequired: true,
       },
       nightChargingRemotePollPeriod: {
         type: 'numberValue',
-        label: 'Night Remote Car Charging Poll Period',
+        label: 'Période de sondage sur la recharge nocturne à distance des véhicules',
         isRequired: true,
       },
     },
@@ -553,13 +553,13 @@ export async function loadCustomClimateConfig(climateConfig: CustomClimateConfig
   const defaultClimateConfig = {
     name: '',
     tempType: 'C',
-    temp: DEFAULT_TEMPS.C.warm,
+    temp: DEFAULT_TEMPS.C.Chaud,
     frontDefrost: true,
     rearDefrost: true,
     steering: true,
     durationMinutes: 15,
-    seatClimate: 'OFF',
-    seatClimateSettings: 'ALL',
+    seatClimate: 'low',
+    seatClimateSettings: 'Chauffeur',
   } as CustomClimateConfig
   if (!climateConfig) climateConfig = defaultClimateConfig
   else climateConfig = { ...defaultClimateConfig, ...climateConfig } // merge with default config
@@ -588,7 +588,7 @@ export async function loadCustomClimateConfig(climateConfig: CustomClimateConfig
         steering: steering,
         durationMinutes: durationMinutes,
         seatClimate: seatClimate || 'OFF',
-        seatClimateSettings: seatClimateSettings || 'ALL',
+        seatClimateSettings: seatClimateSettings || 'Tous',
       } as CustomClimateConfig
       if (previousName) {
         const index = config.customClimates.findIndex((x) => x.name === previousName)
@@ -601,9 +601,9 @@ export async function loadCustomClimateConfig(climateConfig: CustomClimateConfig
     onStateChange: (state, previousState): Partial<CustomClimateConfig> => {
       if (state.tempType !== previousState.tempType) {
         if (state.tempType === 'C') {
-          state.temp = DEFAULT_TEMPS.C.warm
+          state.temp = DEFAULT_TEMPS.C.Chaud
         } else {
-          state.temp = DEFAULT_TEMPS.F.warm
+          state.temp = DEFAULT_TEMPS.F.Chaud
         }
       }
       return state
@@ -646,17 +646,17 @@ export async function loadCustomClimateConfig(climateConfig: CustomClimateConfig
       },
       frontDefrost: {
         type: 'checkbox',
-        label: 'Activer le dégivreur avant?' /*  */,
+        label: 'Activer le dégivreur avant ?' /*  */,
         isRequired: false,
       },
       rearDefrost: {
         type: 'checkbox',
-        label: 'Activer le dégivreur arrière?' /*  */,
+        label: 'Activer le dégivreur arrière ?' /*  */,
         isRequired: false,
       },
       steering: {
         type: 'checkbox',
-        label: 'Activer le volant chauffant?' /*  */,
+        label: 'Activer le volant chauffant ?' /*  */,
         isRequired: false,
       },
       durationMinutes: {
@@ -674,7 +674,7 @@ export async function loadCustomClimateConfig(climateConfig: CustomClimateConfig
         type: 'dropdown',
         label: 'Banc chauffant "Sélection des bancs"' /*  */,
         isRequired: true,
-        options: ['DRIVER', 'FRONT', 'ALL'],
+        options: ['Chauffeur', 'Avant', 'Tous'],
       },
       delete: {
         type: 'clickable',

@@ -98,12 +98,12 @@ export async function createApp(config: Config, bl: Bluelink) {
     const version = new Version('BLeeBand', 'egmp-bluelink-scriptable')
     version.promptForUpdate().then((updateRequired: boolean) => {
       if (updateRequired) {
-        quickOptions(['See Details', 'Cancel', 'Never Ask Again'], {
+        quickOptions(['Voir les détails', 'Annuler', 'Ne plus demandé'], {
           title: 'm-a-j disponible',
           onOptionSelect: (opt) => {
-            if (opt === 'See Details') {
+            if (opt === 'Voir les détails') {
               loadAboutScreen()
-            } else if (opt === 'Never Ask Again') {
+            } else if (opt === 'Ne plus demandé') {
               config.promptForUpdate = false
               setConfig(config)
             }
@@ -177,12 +177,12 @@ const settings = (bl: Bluelink) => {
         loadConfigScreen(bl)
       },
       onTripleTap() {
-        quickOptions(['Share Debug Logs', 'Reset All Settings', 'Downgrade to Previous Version', 'Cancel'], {
-          title: 'Choose Debug Option:',
+        quickOptions(['Partager les journaux de débogage', 'Réinitialiser tous les paramètres', 'Revenir à la version précédente', 'Annuler'], {
+          title: "Choisissez l'option de débogage :",
           onOptionSelect: (opt) => {
-            if (opt === 'Cancel') return
+            if (opt === 'Annuler') return
             switch (opt) {
-              case 'Share Debug Logs': {
+              case 'Partager les journaux de débogage': {
                 const blRedactedLogs = bl.getLogger().readAndRedact()
                 const widgetLogs = getWidgetLogger().read()
                 const appLogs = getAppLogger().read()
@@ -196,9 +196,9 @@ const settings = (bl: Bluelink) => {
                 ])
                 break
               }
-              case 'Reset All Settings': {
-                destructiveConfirm('Confirm Setting Reset - ALL settings/data will be removed', {
-                  confirmButtonTitle: 'Delete all Settings/Data',
+              case 'Réinitialiser tous les paramètres': {
+                destructiveConfirm('Confirmer la réinitialisation des paramètres - TOUS les paramètres/données seront supprimés', {
+                  confirmButtonTitle: 'Supprimer tous les données',
                   onConfirm: () => {
                     bl.deleteCache()
                     deleteConfig()
@@ -209,9 +209,9 @@ const settings = (bl: Bluelink) => {
                 })
                 break
               }
-              case 'Downgrade to Previous Version': {
-                destructiveConfirm('Confirm downgrade to saved older app version?', {
-                  confirmButtonTitle: 'Yes, downgrade',
+              case 'Revenir à la version précédente': {
+                destructiveConfirm("Confirmer la rétrogradation vers une version antérieure de l'application enregistrée ?", {
+                  confirmButtonTitle: 'Oui, confirmer',
                   onConfirm: () => {
                     doDowngrade()
                     // @ts-ignore - undocumented api
@@ -274,7 +274,7 @@ const pageIcons = connect(
   ) => {
     const lastSeen = new Date(lastUpdated)
     const batteryIcon = isCharging ? 'charging' : 'not-charging'
-    const batteryText = 'Not Charging'
+    const batteryText = 'Pas en charge'
     const chargingPowerText = getChargingPowerString(chargingPower)
     let chargingPowerTextRowPercentage = '25%'
 
@@ -302,7 +302,7 @@ const pageIcons = connect(
     const conditioningText = isClimateOn ? 'Ventilation On' : 'Ventilation Off' /*  */
     const conditioningIcon = isClimateOn ? 'climate-on' : 'climate-off'
 
-    const lockedText = locked ? 'Voiture barrée' : 'Voiture débarrée' /*  */
+    const lockedText = locked ? 'Barré' : 'Débarré' /*  */
     const lockedIcon = locked ? 'locked' : 'unlocked'
 
     const twelveSocText = twelveSoc > 0 ? `Batterie 12v à ${twelveSoc}%` : 'Status batterie 12v inconnu' /*  */
@@ -321,7 +321,7 @@ const pageIcons = connect(
       ? chargeLimitName
         ? `${chargeLimitName} Charge Limit`
         : `Limite de charge: ${chargeLimitPercentText}` /*  */
-      : 'Set Charge Limit'
+      : 'Réglage limite de charge'
 
     return Div([
       Div(
@@ -339,10 +339,10 @@ const pageIcons = connect(
             if (isUpdating) {
               return
             }
-            quickOptions(['Charge', 'Stop Charging', 'Cancel'], {
-              title: 'Confirm charge action',
+            quickOptions(['Charge', 'Arreter la recharge', 'Annuler'], {
+              title: "Confirmer la recharge",
               onOptionSelect: (opt) => {
-                if (opt === 'Cancel') return
+                if (opt === 'Annuler') return
                 doAsyncUpdate({
                   command: opt === 'Charge' ? 'startCharge' : 'stopCharge',
                   bl: bl,
@@ -392,9 +392,9 @@ const pageIcons = connect(
                 ? customClimates
                 : customClimates.concat(STANDARD_CLIMATE_OPTIONS),
               {
-                title: 'Confirm climate action',
+                title: 'Confirmer la ventilation',
                 onOptionSelect: (opt) => {
-                  if (opt === 'Cancel') return
+                  if (opt === 'Annuler') return
                   let payload = undefined
                   if (!STANDARD_CLIMATE_OPTIONS.includes(opt)) {
                     payload = Object.values(config.customClimates).filter((x) => x.name === opt)[0]
@@ -495,10 +495,10 @@ const pageIcons = connect(
             if (isUpdating) {
               return
             }
-            quickOptions(['Lock', 'Unlock', 'Cancel'], {
-              title: 'Confirm lock action',
+            quickOptions(['Lock', 'Unlock', 'Annuler'], {
+              title: 'Confirmer statut des portes',
               onOptionSelect: (opt) => {
-                if (opt === 'Cancel') return
+                if (opt === 'Annuler') return
                 doAsyncUpdate({
                   command: opt === 'Lock' ? 'lock' : 'unlock',
                   bl: bl,
@@ -549,10 +549,10 @@ const pageIcons = connect(
             }
             const config = getConfig() // always re-read in case config has been mutated by config screens, and app page is not refreshed
             const chargeLimits = Object.values(config.chargeLimits).map((x) => x.name)
-            quickOptions(chargeLimits.concat(['Cancel']), {
-              title: 'Confirm charge limit to set',
+            quickOptions(chargeLimits.concat(['Annuler']), {
+              title: 'Confirmer la limite de charge',
               onOptionSelect: (opt) => {
-                if (opt === 'Cancel') return
+                if (opt === 'Annuler') return
                 const payload = Object.values(config.chargeLimits).filter((x) => x.name === opt)[0]
                 if (!payload) return
                 doAsyncUpdate({
@@ -631,10 +631,10 @@ const pageImage = connect(({ state: { appIcon, updatingActions } }, bl: Bluelink
     },
     onTap() {
       if (!isUpdating) {
-        quickOptions(['On Google Maps', 'On Apple Maps', 'Cancel'], {
-          title: 'Get Location of Car?',
+        quickOptions(['On Google Maps', 'On Apple Maps', 'Annuler'], {
+          title: 'Trouver votre voiture?',
           onOptionSelect: (opt) => {
-            if (opt === 'Cancel') return
+            if (opt === 'Annuler') return
             doAsyncUpdate({
               command: 'location',
               bl: bl,
@@ -725,7 +725,7 @@ async function doAsyncUpdate(props: doAsyncUpdateProps) {
 
       // log error on failure
       if (!didSucceed) {
-        logger.log(`Failed to complete request ${JSON.stringify(data)}`)
+        logger.log(`La requête n'a pas pu être finalisée. ${JSON.stringify(data)}`)
       }
     } else {
       // continue to rotate icon indicating ongoing update

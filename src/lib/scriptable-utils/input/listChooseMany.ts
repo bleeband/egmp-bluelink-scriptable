@@ -31,7 +31,7 @@ export const listChooseMany = async <Label extends string, Value = Label>(
   options: Option<Label, Value>[],
   {
     initValues = [],
-    title = 'Select options',
+    title = 'Sélectionner les options',
     subtitle,
     areValuesEqual = (a, b) => a === b,
   }: Config<Label, Value> = {},

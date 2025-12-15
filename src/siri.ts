@@ -15,7 +15,7 @@ const SIRI_LOG_FILE = 'egmp-bluelink-siri.log'
 export async function processSiriRequest(config: Config, bl: Bluelink, shortcutParameter: any): Promise<string> {
   const shortcutParameterAsString = shortcutParameter as string
   const logger = new Logger(SIRI_LOG_FILE, 100)
-  if (config.debugLogging) logger.log(`Siri request: ${shortcutParameterAsString}`)
+  if (config.debugLogging) logger.log(`Demande à Siri: ${shortcutParameterAsString}`)
 
   const commands = commandMap
   for (const value of config.customClimates) {
@@ -47,11 +47,11 @@ export async function processSiriRequest(config: Config, bl: Bluelink, shortcutP
 
     if (found) {
       const response = await commandDetection.function(bl, commandDetection.data)
-      if (config.debugLogging) logger.log(`Siri response: ${response}`)
+      if (config.debugLogging) logger.log(`Réponse de Siri: ${response}`)
       return response
     }
   }
-  return "Vous m'avez demander ${shortcutParameter} mais je ne peux l'exécuter" /*  */
+  return `Vous m'avez demandé ${shortcutParameter} mais je ne peux l'exécuter` /*  */
 }
 
 async function getStatus(bl: Bluelink): Promise<string> {
@@ -61,7 +61,7 @@ async function getStatus(bl: Bluelink): Promise<string> {
   const carName = status.car.nickName || `${status.car.modelYear}`
 
   let response =
-    "La batterie de ${carName} est a ${status.status.soc}% et ${status.status.locked ? 'locked' : 'un-locked'}" /*  */
+    `La batterie de ${carName} est a ${status.status.soc}% et ${status.status.locked ? 'locked' : 'un-locked'}` /*  */
   if (status.status.climate) response += ', et la ventilation fonctionne' /*  */
 
   if (status.status.isCharging) {
@@ -275,7 +275,7 @@ interface commandDetection {
 // and certain words contain sub-words. Hence "unlock" needs to be before "lock" etc
 const commandMap: commandDetection[] = [
   {
-    words: ['status', 'remote'],
+    words: ['status', 'distant'],
     function: getRemoteStatus,
   },
   {
@@ -287,31 +287,31 @@ const commandMap: commandDetection[] = [
     function: getStatus,
   },
   {
-    words: ['warm'],
+    words: ['Chaud'],
     function: warm,
   },
   {
-    words: ['cool'],
+    words: ['Froid'],
     function: cool,
   },
   {
-    words: ['climate', 'off'],
+    words: ['Vent', 'off'],
     function: climateOff,
   },
   {
-    words: ['unlock'],
+    words: ['Débarré'],
     function: unlock,
   },
   {
-    words: ['lock'],
+    words: ['Barré'],
     function: lock,
   },
   {
-    words: ['start', 'charging'],
+    words: ['Début', 'charge'],
     function: startCharge,
   },
   {
-    words: ['stop', 'charging'],
+    words: ['Arrêt', 'charge'],
     function: stopCharge,
   },
 ]

@@ -87,7 +87,7 @@ const getGetData = <T>(ioObj: IOObject<T>) =>
     const { cache$, defaultData } = ioObj
     if (useCache) {
       if (!cache$) {
-        throw new Error('Attempting to get data with cache, but cache is disabled.')
+        throw new Error('Tentative de récupération des données via le cache, mais le cache est désactivé.')
       }
       return cache$.getData().data
     }

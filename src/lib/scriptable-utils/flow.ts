@@ -55,7 +55,7 @@ export const not = (val: any) => !val
 export const cycle = <T>(currentValue: T, cycleOptions: T[], isEqual: ObjComparison<T> = (a, b) => a === b) => {
   const currIndex = cycleOptions.findIndex((opt) => isEqual(opt, currentValue))
   if (currIndex === -1) {
-    console.warn(`Current value ${String(currentValue)} not found in cycle options, returning first option`)
+    console.warn(`Valeur actuelle ${String(currentValue)} introuvable dans les options du cycle, retour de la première option`)
     return safeArrLookup(cycleOptions, 0, 'cycle.1')
   }
   const isLast = currIndex === cycleOptions.length - 1
@@ -105,7 +105,7 @@ const getPerformanceMeasurers = ({
   }
   const stop = () => {
     if (!startDate) {
-      throw new Error(`Performance timer ${name} stopped before starting.`)
+      throw new Error(`Le minuteur de performance ${name} s'est arrêté avant de démarrer.`)
     }
     const duration = Date.now() - startDate.getTime()
     if (duration < threshold && !logAllMeasurements) return
@@ -113,7 +113,7 @@ const getPerformanceMeasurers = ({
     console.warn(
       JSON.stringify(
         {
-          'Performance measure exceeded threshold': name,
+          'La mesure de performance a dépassé le seuil': name,
           threshold,
           actual: duration,
           metadata,
@@ -212,5 +212,5 @@ export const isIn = <T>(element: T, arr: T[], isEqual: ObjComparison<T> = (a, b)
 
 // https://stackoverflow.com/questions/39419170/how-do-i-check-that-a-switch-block-is-exhaustive-in-typescript/39419171#39419171
 export const assertUnreachable = (x: never): never => {
-  throw new Error(`Unexpectedly received value ${String(x as unknown)}`)
+  throw new Error(`Valeur reçue de manière inattendue ${String(x as unknown)}`)
 }

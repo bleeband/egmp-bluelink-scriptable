@@ -86,7 +86,7 @@ let config: OptionalConfig & Partial<RequiredConfig> = {
 export const getConfig = <K extends keyof Config>(key: K) => {
   const value = config[key]
   if (value === undefined) {
-    throw new Error(`You must register "${key}" in your implementation before using functions that depend on it.`)
+    throw new Error(`Vous devez enregistrer "${key}" dans votre implémentation avant d'utiliser les fonctions qui en dépendent.`)
   }
   return value as Config[K]
 }

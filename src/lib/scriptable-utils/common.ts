@@ -113,7 +113,7 @@ export class ErrorWithPayload extends Error {
 export const safeArrLookup = <T extends NotUndefined<any>>(arr: T[], index: number, callingFn: string) => {
   const val = arr[index]
   if (val === undefined) {
-    const errorMsg = `Array lookup failed in "${callingFn}", no value at index ${index}`
+    const errorMsg = `Échec de la recherche dans le tableau "${callingFn}", aucune valeur à l'index ${index}`
 
     console.error(errorMsg)
     throw new ErrorWithPayload(errorMsg, { arr })
@@ -128,14 +128,14 @@ export const safeObjLookup = <K extends string | number, O extends Record<K, Not
   callingFn: string,
 ) => {
   if (!Object.hasOwn(obj, key)) {
-    const errorMsg = `Object lookup failed in "${callingFn}", key "${key}" does not exist`
+    const errorMsg = `La recherche d'objet a échoué dans "${callingFn}", clé "${key}" n'existe pas.`
 
     console.error(errorMsg)
     throw new ErrorWithPayload(errorMsg, { obj })
   }
   const val = obj[key]
   if (val === undefined) {
-    const errorMsg = `Object lookup failed in "${callingFn}", value of key "${key}" is undefined.`
+    const errorMsg = `La recherche d'objet a échoué dans "${callingFn}", valeur de la clé "${key}" est indéfini.`
 
     console.error(errorMsg)
     throw new ErrorWithPayload(errorMsg, { obj })

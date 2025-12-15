@@ -3,7 +3,7 @@ import { Falsy, LabeledValue, MapFn, NoParamFn, Omit_ } from '../types/utilTypes
 import alert from './alert'
 import { AlertOpts, AlertButton } from './types'
 
-const CANCEL_BUTTON_TEXT = 'Cancel'
+const CANCEL_BUTTON_TEXT = 'Annuler'
 
 type SharedOpts<Returns> = Pick<Partial<AlertOpts>, 'title' | 'message' | 'presentAsSheet'> & {
   onOptionSelect?: MapFn<Returns, any>
@@ -23,7 +23,7 @@ type QuickOptions = {
 
 const quickOptions: QuickOptions = async (
   listOptions: (string | LabeledValue<unknown> | Falsy)[],
-  { title = 'Select option', onOptionSelect, onCancel, presentAsSheet = true, ...otherAlertOpts }: SharedOpts<any> = {},
+  { title = 'Option choisi', onOptionSelect, onCancel, presentAsSheet = true, ...otherAlertOpts }: SharedOpts<any> = {},
 ): Promise<any> => {
   const validListOptions = listOptions.filter(ExcludeFalsy)
   if (validListOptions.length === 0) return null

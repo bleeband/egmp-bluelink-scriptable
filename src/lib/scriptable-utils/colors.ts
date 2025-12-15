@@ -20,7 +20,7 @@ export class EnhancedColor {
     this.label = label
     this.isDynamic = Boolean(lightColor && darkColor)
     if (!(staticColor || this.isDynamic)) {
-      throw new Error(`Color ${label}: must provide more color data`)
+      throw new Error(`Couleur ${label}: doit fournir davantage de données de couleur`)
     }
     this.colorObj = { light: lightColor, dark: darkColor, static: staticColor }
   }
@@ -170,7 +170,7 @@ export type ColorKey = (typeof colorKeys)[number]
 const getKeyVal = (key: ColorKey) => {
   if (hasKey(COLORS, key)) return COLORS[key]
   if (hasKey(COLOR_ALIASES, key)) return COLOR_ALIASES[key]
-  throw new Error(`No color found for key ${String(key)}`)
+  throw new Error(`Aucune couleur trouvée pour la clé ${String(key)}`)
 }
 
 export const getColor = (key: ColorKey) => {

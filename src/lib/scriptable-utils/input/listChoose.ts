@@ -37,7 +37,7 @@ const findResultValue = <V>(resultLabel: string, options: AllOptionTypes<string,
     .filter(ExcludeFalsy)
     .find((option) => (isString(option) ? option === resultLabel : option.label === resultLabel))
   if (!match) {
-    throw new Error(`Expected to find selected label ${resultLabel} in listChoose options.`)
+    throw new Error(`On s'attend à trouver l'étiquette sélectionnée ${resultLabel} dans la listeChoisissez des options.`)
   }
   return isString(match) ? match : match.value
 }
@@ -76,7 +76,7 @@ export default listChoose
 //
 //
 
-const CUSTOM_OPTION_LABEL = 'Custom'
+const CUSTOM_OPTION_LABEL = 'Perso'
 
 /** Just like `listChoose`, but with ability to add custom response. */
 export const listChooseWithCustom = async (
@@ -103,7 +103,7 @@ export const listChooseWithCustom = async (
     return result
   }
 
-  const customResponse = await textInput('Custom response')
+  const customResponse = await textInput('Réponse personnalisée')
   await (customResponse ? onOptionSelect?.(customResponse) : onCancel?.())
   return customResponse ?? null
 }

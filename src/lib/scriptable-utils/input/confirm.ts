@@ -1,9 +1,9 @@
 import { NoParamFn } from '../types/utilTypes'
 import alert from './alert'
 
-const DEFAULT_CONFIRM_DIALOG_TITLE = 'Confirm action?'
+const DEFAULT_CONFIRM_DIALOG_TITLE = 'Confirmer?'
 const DEFAULT_CONFIRM_BUTTON_TEXT = 'OK'
-const DEFAULT_CANCEL_BUTTON_TEXT = 'Cancel'
+const DEFAULT_CANCEL_BUTTON_TEXT = 'Annuler'
 
 const dontShowAgainMap: Record<string, boolean> = {}
 const setDontShowAgain = (key: string, val: boolean) => (dontShowAgainMap[key] = val)

@@ -14,10 +14,10 @@ type Opts = {
 } & TextFieldConfigOpts
 
 export default async (
-  title = 'Enter text',
+  title = 'Saisissez du texte',
   {
     submitText = 'OK',
-    cancelText = 'Cancel',
+    cancelText = 'Annuler',
     onSubmit = () => {},
     onCancel = () => {},
     message,

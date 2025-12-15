@@ -72,7 +72,7 @@ async function waitForCommandSent(
 async function refreshDataForWidgetWithTimeout(bl: Bluelink, config: Config, timeout = 4000): Promise<WidgetRefresh> {
   const logger = getWidgetLogger()
   const timer = Timer.schedule(timeout, false, () => {
-    if (config.debugLogging) logger.log(`Timeout refreshing data for widget - failing back to cached data`)
+    if (config.debugLogging) logger.log("Délai d'actualisation des données du widget dépassé ; utilisation des données mises en cache.")
     return {
       status: bl.getCachedStatus(),
       nextRefresh: new Date(Date.now() + 15 * 60 * 1000), // 15 minutes by default if call timeouts
@@ -145,7 +145,7 @@ async function refreshDataForWidget(bl: Bluelink, config: Config): Promise<Widge
   const chargingComplete = status.status.isCharging && chargeCompletionTime < currentTimestamp
   if (status.status.isCharging && config.debugLogging)
     logger.log(
-      `Now:${currentTimestamp}, Charge Completion Time: ${chargeCompletionTime}, chargingComplete: ${chargingComplete}`,
+      `Maintenant:${currentTimestamp}, Délai de fin de charge: ${chargeCompletionTime}, Charge complete: ${chargingComplete}`,
     )
 
   const chargingAndOverRemoteRefreshInterval =
@@ -183,7 +183,7 @@ async function refreshDataForWidget(bl: Bluelink, config: Config): Promise<Widge
     ) {
       // Note a remote refresh takes to long to wait for - so trigger it and set a small nextRefresh value to pick
       // up the remote data on the next widget refresh
-      if (config.debugLogging) logger.log('Doing Remote Refresh')
+      if (config.debugLogging) logger.log('Mise à jour à distance')
       bl.getStatus(true, true) // no await deliberatly as it takes to long to complete
 
       //wait for getCar command to be completed + another 200ms to ensure the remote status command is sent
@@ -192,16 +192,16 @@ async function refreshDataForWidget(bl: Bluelink, config: Config): Promise<Widge
         await sleep(200)
         cache.lastRemoteRefresh = currentTimestamp
         cache.lastCommand = 'REMOTE'
-        if (config.debugLogging) logger.log('Completed Remote Refresh')
+        if (config.debugLogging) logger.log('Actualisation à distance terminée')
       } else {
-        if (config.debugLogging) logger.log('Remote status command failed to send')
+        if (config.debugLogging) logger.log('Échec de l'envoi de la commande d'état distante')
       }
       nextRefresh = new Date(Date.now() + 5 * 60 * 1000)
     } else if (chargingComplete || currentTimestamp > status.status.lastStatusCheck + MIN_API_REFRESH_TIME) {
-      if (config.debugLogging) logger.log('Doing API Refresh')
+      if (config.debugLogging) logger.log("Actualisation de l'API")
       status = await bl.getStatus(false, true)
       cache.lastCommand = 'API'
-      if (config.debugLogging) logger.log('Completed API Refresh')
+      if (config.debugLogging) logger.log("Actualisation de l'API terminée")
     }
   } catch (_error) {
     // ignore any API errors and just displayed last cached values in widget
@@ -211,7 +211,7 @@ async function refreshDataForWidget(bl: Bluelink, config: Config): Promise<Widge
   Keychain.set(getCacheKey(true), JSON.stringify(cache))
   if (config.debugLogging)
     logger.log(
-      `Current time: ${new Date().toLocaleString()}. cache: ${JSON.stringify(cache)}, Last Remote Check: ${new Date(lastRemoteCheck).toLocaleString()} Setting next widget refresh to ${nextRefresh.toLocaleString()}`,
+      `Heure actuelle: ${new Date().toLocaleString()}. cache: ${JSON.stringify(cache)}, Dernière vérification à distance: ${new Date(lastRemoteCheck).toLocaleString()} Paramétrage de la prochaine actualisation du widget sur ${nextRefresh.toLocaleString()}`,
     )
 
   return {
@@ -233,7 +233,7 @@ export function createErrorWidget(message: string) {
 
   // Show app icon and title
   const titleStack = mainStack.addStack()
-  const titleElement = titleStack.addText('Error')
+  const titleElement = titleStack.addText('Erreur')
   titleElement.textColor = DARK_MODE ? Color.red() : Color.red()
   titleElement.font = Font.boldSystemFont(25)
   titleStack.addSpacer()

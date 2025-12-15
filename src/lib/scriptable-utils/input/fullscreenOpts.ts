@@ -53,7 +53,7 @@ export default async (initNodes: FullscreenOptNode[]) => {
       index: number,
     ) => {
       if (!(action || children)) {
-        throw new Error('Fullscreen option requires either an action or children')
+        throw new Error("L'option plein écran nécessite une action ou des enfants")
       }
       const defaultBgColor = getZebraStripeColor(index)
       const color = flavor ? parseFlavor(flavor).color : getColor('primaryTextColor')

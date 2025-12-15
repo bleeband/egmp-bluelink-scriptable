@@ -6,7 +6,7 @@ const getUntintedImage = (key: SFSymbolKey) => {
   const symbol = SFSymbol.named(symbolsMap[key])
 
   if (!symbol) {
-    throw new Error(`Invalid SFSymbol key: ${key}`)
+    throw new Error(`Clé SFSymbol invalide: ${key}`)
   }
   /** Make it a bit bigger so it's high-def enough to scale up. */
   symbol.applyFont(Font.systemFont(53))

@@ -67,12 +67,12 @@ export default class RepeatingTimer {
   }
 
   async start() {
-    if (!this.onFire) throw new Error('Can not start repeatinng timer w/o onFire callback set')
+    if (!this.onFire) throw new Error('Impossible de démarrer une minuterie répétitive avec/sans rappel Fire activé')
     this.timer.schedule(async () => {
       try {
         await this.onFire!()
       } catch (e) {
-        alertAndLogError(e, 'RepeatingTimer/Scheduled onFire')
+        alertAndLogError(e, 'Minuteur répétitif/Démarrage programmé')
       }
       if (this.maxRepeatCount) {
         this.repeatCount++
@@ -83,7 +83,7 @@ export default class RepeatingTimer {
     try {
       if (this.fireImmediately) await this.onFire()
     } catch (e) {
-      alertAndLogError(e, 'RepeatingTimer/Start')
+      alertAndLogError(e, 'Minuteur répétitif/Démarrage')
     }
   }
 
@@ -95,7 +95,7 @@ export default class RepeatingTimer {
    */
   resetCurrent() {
     if (!this.isRunning) {
-      throw new Error('Can not reset a timer that is not running')
+      throw new Error("Impossible de réinitialiser une minuterie qui n'est pas en marche.")
     }
     this.timer.invalidate()
     this.timer = getTimer(this.interval)
@@ -107,7 +107,7 @@ export default class RepeatingTimer {
     try {
       if (this.onStop) await this.onStop()
     } catch (e) {
-      alertAndLogError(e, 'RepeatingTimer/stop')
+      alertAndLogError(e, 'Minuteur répétitif/arrêt')
     }
     this.isRunning = false
   }
