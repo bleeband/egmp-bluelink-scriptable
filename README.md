@@ -43,5 +43,7 @@ Le code est en TypeScript, transpill√© en JavaScript parce que Scriptable aime √
 Pour build le code
 
 cd src
+
 npm install
+
 npm run build ./src/index.ts egmp-bluelink

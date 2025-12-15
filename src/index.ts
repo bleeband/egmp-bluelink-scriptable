@@ -111,7 +111,7 @@ import { confirm, quickOptions } from './lib/scriptable-utils'
 
     if (!bl) {
       logger.log('Bluelink instance is undefined')
-      await confirm('Une erreur est survenue lors de l’initialisation de Bluelink — veuillez réessayer plus tard', {
+      await confirm("Une erreur est survenue lors de l'initialisation de Bluelink — veuillez réessayer plus tard", {
         /*  */ confirmButtonTitle: 'Ok',
         includeCancel: false,
       })

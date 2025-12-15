@@ -165,8 +165,8 @@ const settings = (bl: Bluelink) => {
   return Div(
     [
       Img(getTintedIcon('settings'), { align: 'left' }),
-      P('Réglages', {                 /*  */
-        /* Settings */ font: (n) => Font.boldSystemFont(n),
+      P('Réglages', {
+        /*  */ /* Settings */ font: (n) => Font.boldSystemFont(n),
         fontSize: 20,
         align: 'left',
         width: '90%',

@@ -89,7 +89,7 @@ const appDescription = connect(() => {
   return Div(
     [
       P(
-        'Une application Scriptable pour iOS qui vous permet de contrôler votre voiture électrique Hyundai/Kia via l’API Bluelink.',
+        "Une application Scriptable pour iOS qui vous permet de contrôler votre voiture électrique Hyundai/Kia via l'API Bluelink.",
         {
           /*  */ font: (n) => Font.mediumRoundedSystemFont(n),
           fontSize: 20,
