@@ -89,7 +89,7 @@ import { confirm, quickOptions } from './lib/scriptable-utils'
         await quickOptions(
           carOptionsNames.map((car) => car.name),
           {
-            title: 'Veuillez choisir vottre véhicule' /*  */,
+            title: 'Veuillez choisir votre véhicule' /*  */,
             onOptionSelect: (opt) => {
               const selectedCar = carOptionsNames.find((car) => car.name === opt)
               if (selectedCar) {

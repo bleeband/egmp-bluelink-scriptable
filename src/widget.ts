@@ -194,7 +194,7 @@ async function refreshDataForWidget(bl: Bluelink, config: Config): Promise<Widge
         cache.lastCommand = 'REMOTE'
         if (config.debugLogging) logger.log('Actualisation à distance terminée')
       } else {
-        if (config.debugLogging) logger.log('Échec de l'envoi de la commande d'état distante')
+        if (config.debugLogging) logger.log("Échec de l'envoi de la commande d'état distante")
       }
       nextRefresh = new Date(Date.now() + 5 * 60 * 1000)
     } else if (chargingComplete || currentTimestamp > status.status.lastStatusCheck + MIN_API_REFRESH_TIME) {
